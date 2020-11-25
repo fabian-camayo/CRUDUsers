@@ -1,17 +1,27 @@
-<html lang="es">
-<!DOCTYPE html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Materialize -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <!-- Jquery -->
-    <script src="http://code.jquery.com/jquery-3.5.1.slim.js" integrity="sha256-DrT5NfxfbHvMHux31Lkhxg42LY6of8TaYyK50jnxRnM=" crossorigin="anonymous"></script>
-    <title>CRUD - USUARIOS</title>
-</head>
-<body>
-    <!--Agregar vista de dashboard-->
-    <?php include("views/dashboard.php");?>
-</body>
-</html>
+<?php
+    require_once 'data/database.php';
+
+    $controller = 'user';
+
+        // FrontController
+        if(!isset($_REQUEST['c']))
+        {
+            require_once "controller/$controller.controller.php";
+            $controller = ucwords($controller) . 'Controller';
+            $controller = new $controller;
+            $controller->Index();    
+        }
+        else
+        {
+            // Obtener controlador
+            $controller = strtolower($_REQUEST['c']);
+            $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : 'Index';
+    
+            // Instanciar controlador
+            require_once "controller/$controller.controller.php";
+            $controller = ucwords($controller) . 'Controller';
+            $controller = new $controller;
+    
+            // Llama  a la accion
+            call_user_func( array( $controller, $action ) );
+        }
